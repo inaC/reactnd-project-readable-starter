@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider } from 'material-ui/styles';
-import './App.css';
 import AppBar from 'material-ui/AppBar';
+import './App.css';
 
 class App extends Component {
   render() {
