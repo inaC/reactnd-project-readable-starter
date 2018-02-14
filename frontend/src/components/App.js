@@ -9,7 +9,7 @@ class App extends Component {
       <div className="App">
         <MuiThemeProvider>
           <AppBar
-            title="Title"
+            title="Readable"
           />
         </MuiThemeProvider>
       </div>
