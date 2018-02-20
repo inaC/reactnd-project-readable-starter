@@ -7,3 +7,11 @@
   margin: 20px;
   text-align: left;
 }
+
+.item {
+  margin-bottom: 20px;
+}
+
+.addItem {
+  text-align: right;
+}
