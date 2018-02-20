@@ -6,6 +6,8 @@ export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const SET_CATEGORY = 'SET_CATEGORY';
 export const SET_SORT_BY_TYPE = 'SET_SORT_BY_TYPE';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+export const UPDATE_VOTE_SCORE = 'UPDATE_VOTE_SCORE';
+export const REMOVE_POST = 'REMOVE_POST';
 
 const fromResponseToObject = (response, type, valueToStore = null) => (
   Object.keys(response).reduce((accumulator, index) => {
@@ -54,10 +56,28 @@ export const toggleSideBar = boolean => ({
   sideBarOpen: boolean,
 });
 
+export const updateVoteScorePost = post => ({
+  type: UPDATE_VOTE_SCORE,
+  post,
+});
+
+export const removePost = post => ({
+  type: REMOVE_POST,
+  postId: post.id,
+});
+
 export const getPosts = dispatch => (
   api.fetchPosts().then(posts => dispatch(receivePosts(posts)))
 );
 
 export const getCategories = dispatch => (
   api.fetchCategories().then(categories => dispatch(receiveCategories(categories)))
+);
+
+export const putVoteScorePost = (postId, option) => dispatch => (
+  api.votePost(postId, option).then(post => dispatch(updateVoteScorePost(post)))
+);
+
+export const deletePost = postId => dispatch => (
+  api.deletePost(postId).then(post => dispatch(removePost(post)))
 );

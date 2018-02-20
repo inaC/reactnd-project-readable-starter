@@ -1,4 +1,12 @@
-import { RECEIVE_POSTS, RECEIVE_CATEGORIES, SET_CATEGORY, SET_SORT_BY_TYPE, TOGGLE_SIDEBAR } from '../actions';
+import {
+  RECEIVE_POSTS,
+  RECEIVE_CATEGORIES,
+  SET_CATEGORY,
+  SET_SORT_BY_TYPE,
+  TOGGLE_SIDEBAR,
+  UPDATE_VOTE_SCORE,
+  REMOVE_POST,
+} from '../actions';
 
 const initialState = {
   categories: null,
@@ -47,6 +55,21 @@ function reducer(state = initialState, action) {
           ...state.ui,
           sideBarOpen: action.sideBarOpen,
         },
+      };
+    case UPDATE_VOTE_SCORE:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.post.id]: action.post,
+        },
+      };
+    case REMOVE_POST:
+      const newState = Object.assign(state).posts;
+      delete newState[action.postId];
+      return {
+        ...state,
+        posts: newState,
       };
     default: return state;
   }
