@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ApplicationBar from './ApplicationBar';
 import Item from './Item';
+import FormModal from './FormModal';
 import './App.css';
 import { getPosts } from '../actions';
 
@@ -36,9 +35,7 @@ class App extends Component {
             </div>
           ))}
           <div className="addItem">
-            <FloatingActionButton>
-              <ContentAdd />
-            </FloatingActionButton>
+            <FormModal />
           </div>
         </div>
       </div>
