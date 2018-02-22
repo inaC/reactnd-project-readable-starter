@@ -6,6 +6,7 @@ import {
   TOGGLE_SIDEBAR,
   UPDATE_VOTE_SCORE,
   REMOVE_POST,
+  ADD_POST,
 } from '../actions';
 
 const initialState = {
@@ -70,6 +71,14 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         posts: newState,
+      };
+    case ADD_POST:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.post.id]: action.post,
+        },
       };
     default: return state;
   }

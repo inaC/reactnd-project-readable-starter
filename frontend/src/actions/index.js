@@ -18,17 +18,9 @@ const fromResponseToObject = (response, type, valueToStore = null) => (
   }, {})
 );
 
-export const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted, commentCount }) => ({
+export const addPost = (post) => ({
   type: ADD_POST,
-  id,
-  timestamp,
-  title,
-  body,
-  author,
-  category,
-  voteScore,
-  deleted,
-  commentCount,
+  post,
 });
 
 export const receivePosts = posts => ({
@@ -80,4 +72,8 @@ export const putVoteScorePost = (postId, option) => dispatch => (
 
 export const deletePost = postId => dispatch => (
   api.deletePost(postId).then(post => dispatch(removePost(post)))
+);
+
+export const insertPost = post => dispatch => (
+  api.addPost(post).then(response => dispatch(addPost({ ...response })))
 );
