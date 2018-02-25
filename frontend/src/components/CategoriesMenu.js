@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import MenuItem from 'material-ui/MenuItem';
 import { getCategories, setCategory } from '../actions';
+import capitalize from '../util/stringPresenter';
 
 class CategoriesMenu extends Component {
   static propTypes = {
@@ -24,7 +25,7 @@ class CategoriesMenu extends Component {
             key={category}
             onClick={() => this.props.setCategory(category)}
             disabled={this.props.currentCategory === category}
-          > {category}
+          > {capitalize(category)}
           </MenuItem>
         ))}
       </div>
@@ -32,11 +33,10 @@ class CategoriesMenu extends Component {
   }
 }
 
-const capitalize = word => word[0].toUpperCase() + word.slice(1);
 const formatCategories = (state) => {
   const { defaultCategory } = state.ui;
   const categories = [defaultCategory].concat(Object.keys(state.categories || {}));
-  return categories.map(category => capitalize(category));
+  return categories;
 };
 
 const mapStateToProps = state => ({

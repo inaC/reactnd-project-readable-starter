@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import { toggleSideBar } from '../actions';
 import SideBar from './SideBar';
 import SortMenu from './SortMenu';
+import capitalize from '../util/stringPresenter';
 
 class ApplicationBar extends Component {
   static propTypes = {
@@ -31,7 +32,7 @@ class ApplicationBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentCategory: state.ui.currentCategory,
+  currentCategory: capitalize(state.ui.currentCategory),
   sideBarOpen: state.ui.sideBarOpen,
 });
 
