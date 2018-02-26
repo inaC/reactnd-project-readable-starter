@@ -1,6 +1,7 @@
 import * as api from '../util/api';
 
 export const ADD_POST = 'ADD_POST';
+export const EDIT_POST = 'EDIT_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const SET_CATEGORY = 'SET_CATEGORY';
@@ -20,6 +21,11 @@ const fromResponseToObject = (response, type, valueToStore = null) => (
 
 export const addPost = (post) => ({
   type: ADD_POST,
+  post,
+});
+
+export const editPost = (post) => ({
+  type: EDIT_POST,
   post,
 });
 
@@ -76,4 +82,8 @@ export const deletePost = postId => dispatch => (
 
 export const insertPost = post => dispatch => (
   api.addPost(post).then(response => dispatch(addPost({ ...response })))
+);
+
+export const updatePost = (id, post) => dispatch => (
+  api.editPost(id, post).then(response => dispatch(editPost({ ...response })))
 );

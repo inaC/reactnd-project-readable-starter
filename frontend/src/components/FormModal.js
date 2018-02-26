@@ -10,13 +10,14 @@ import TextField from 'material-ui/TextField';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import { insertPost } from '../actions';
+import { insertPost, updatePost } from '../actions';
 import './FormModal.css';
 
 class FormModal extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
     insertPost: PropTypes.func.isRequired,
+    updatePost: PropTypes.func.isRequired,
     addItem: PropTypes.bool.isRequired,
     post: PropTypes.object,
   }
@@ -65,7 +66,11 @@ class FormModal extends Component {
     postToCreate.id = Date.now().toString();
     postToCreate.timestamp = postToCreate.id;
     postToCreate.category = this.props.categories[postToCreate.category];
-    this.props.insertPost(postToCreate);
+    if (this.props.addItem) this.props.insertPost(postToCreate);
+    else {
+      const { title, body } = this.state.post;
+      this.props.updatePost(this.state.post.id, { title, body });
+    }
     this.closeForm();
   }
 
@@ -162,5 +167,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   insertPost: post => dispatch(insertPost(post)),
+  updatePost: (id, post) => dispatch(updatePost(id, post)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(FormModal);

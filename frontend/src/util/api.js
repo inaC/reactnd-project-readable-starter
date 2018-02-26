@@ -34,3 +34,13 @@ export const addPost = post =>
     },
     body: JSON.stringify({ ...post })
   }).then(res => res.json());
+
+export const editPost = (id, post) =>
+  fetch(`${api}/posts/${id}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ ...post })
+  }).then(res => res.json());

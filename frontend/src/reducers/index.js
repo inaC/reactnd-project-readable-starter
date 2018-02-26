@@ -7,6 +7,7 @@ import {
   UPDATE_VOTE_SCORE,
   REMOVE_POST,
   ADD_POST,
+  EDIT_POST,
 } from '../actions';
 
 const initialState = {
@@ -73,6 +74,14 @@ function reducer(state = initialState, action) {
         posts: newState,
       };
     case ADD_POST:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.post.id]: action.post,
+        },
+      };
+    case EDIT_POST:
       return {
         ...state,
         posts: {
