@@ -10,7 +10,7 @@ import { getPosts } from '../actions';
 
 class App extends Component {
   static propTypes = {
-    posts: PropTypes.array.isRequired,
+    postIds: PropTypes.array.isRequired,
     getPosts: PropTypes.func.isRequired,
   }
 
@@ -23,19 +23,15 @@ class App extends Component {
       <div className="App">
         <ApplicationBar />
         <div className="body">
-          {this.props.posts.map(post => (
-            <div className="item" key={post.id}>
+          {this.props.postIds.map(postId => (
+            <div className="item" key={postId}>
               <Item
-                author={post.author}
-                id={post.id}
-                title={post.title}
-                voteScore={post.voteScore}
-                commentCount={post.commentCount}
+                id={postId}
               />
             </div>
           ))}
           <div className="addItem">
-            <FormModal />
+            <FormModal addItem />
           </div>
         </div>
       </div>
@@ -44,7 +40,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  posts: Object.keys(state.posts || {}).map(postId => state.posts[postId]),
+  postIds: Object.keys(state.posts || {}).filter((id) => {
+    const { currentCategory, defaultCategory } = state.ui;
+    return (currentCategory === defaultCategory || state.posts[id].category === currentCategory);
+  }),
 });
 
 const mapDispatchToProps = dispatch => ({

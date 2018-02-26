@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Card, CardHeader } from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import ItemActions from './ItemActions';
 
 class Item extends Component {
   static propTypes = {
-    author: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    voteScore: PropTypes.number.isRequired,
-    commentCount: PropTypes.number.isRequired,
+    post: PropTypes.object.isRequired,
   }
 
   render() {
     return (
       <Card>
-        <CardHeader title={this.props.title} subtitle={`@${this.props.author}`} />
+        <CardHeader title={this.props.post.title} subtitle={`@${this.props.post.author}`} />
         <ItemActions
-          voteScore={this.props.voteScore}
-          id={this.props.id}
-          commentCount={this.props.commentCount}
+          post={this.props.post}
         />
       </Card>
     );
   }
 }
 
-export default Item;
+const mapStateToProps = (state, ownProps) => ({
+  post: state.posts[ownProps.id],
+});
+
+export default connect(mapStateToProps)(Item);

@@ -9,48 +9,44 @@ import ActionThumbDown from 'material-ui/svg-icons/action/thumb-down';
 import ActionVisibility from 'material-ui/svg-icons/action/visibility';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import CommunicationForum from 'material-ui/svg-icons/communication/forum';
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import { putVoteScorePost, deletePost } from '../actions';
+import FormModal from './FormModal';
 
 class ItemActions extends Component {
   static propTypes = {
-    id: PropTypes.string.isRequired,
     putVoteScorePost: PropTypes.func.isRequired,
     deletePost: PropTypes.func.isRequired,
-    voteScore: PropTypes.number.isRequired,
-    commentCount: PropTypes.number.isRequired,
+    post: PropTypes.object.isRequired,
   }
 
   render() {
     return (
       <CardActions>
-        <IconButton tooltip={`Vote score: ${this.props.voteScore}`} style={{ cursor: 'initial' }} disableTouchRipple>
+        <IconButton tooltip={`Vote score: ${this.props.post.voteScore}`} style={{ cursor: 'initial' }} disableTouchRipple>
           <ActionStars />
         </IconButton>
-        <IconButton tooltip={`Comments: ${this.props.commentCount}`} style={{ cursor: 'initial' }} disableTouchRipple>
+        <IconButton tooltip={`Comments: ${this.props.post.commentCount}`} style={{ cursor: 'initial' }} disableTouchRipple>
           <CommunicationForum />
         </IconButton>
         <IconButton
           tooltip="Like"
-          onClick={() => this.props.putVoteScorePost(this.props.id, 'upVote')}
+          onClick={() => this.props.putVoteScorePost(this.props.post.id, 'upVote')}
         >
           <ActionThumbUp color="limegreen" />
         </IconButton>
         <IconButton
           tooltip="Dislike"
-          onClick={() => this.props.putVoteScorePost(this.props.id, 'downVote')}
+          onClick={() => this.props.putVoteScorePost(this.props.post.id, 'downVote')}
         >
           <ActionThumbDown color="red" />
         </IconButton>
         <IconButton tooltip="View">
           <ActionVisibility color="mediumpurple" />
         </IconButton>
-        <IconButton tooltip="Edit">
-          <EditorModeEdit color="darkorange" />
-        </IconButton>
+        <FormModal addItem={false} post={this.props.post} />
         <IconButton
           tooltip="Delete"
-          onClick={() => this.props.deletePost(this.props.id)}
+          onClick={() => this.props.deletePost(this.props.post.id)}
         >
           <ActionDelete color="brown" />
         </IconButton>
