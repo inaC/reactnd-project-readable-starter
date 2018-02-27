@@ -10,11 +10,16 @@ export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const UPDATE_VOTE_SCORE = 'UPDATE_VOTE_SCORE';
 export const REMOVE_POST = 'REMOVE_POST';
 
-const fromResponseToObject = (response, type, valueToStore = null) => (
+const fromResponseToObject = (response, type, valueToStore = null, typeUnique = true) => (
   Object.keys(response).reduce((accumulator, index) => {
     const auxAccumulator = Object.assign(accumulator);
     const element = response[index];
-    auxAccumulator[element[type]] = valueToStore ? element[valueToStore] : element;
+    const value = valueToStore ? element[valueToStore] : element;
+    if (typeUnique) auxAccumulator[element[type]] = value;
+    else {
+      if (!auxAccumulator[element[type]]) auxAccumulator[element[type]] = {};
+      auxAccumulator[element[type]][value] = value;
+    }
     return auxAccumulator;
   }, {})
 );
@@ -32,6 +37,7 @@ export const editPost = (post) => ({
 export const receivePosts = posts => ({
   type: RECEIVE_POSTS,
   posts: fromResponseToObject(posts, 'id'),
+  postsByCategory: fromResponseToObject(posts, 'category', 'id', false),
 });
 
 export const receiveCategories = categories => ({

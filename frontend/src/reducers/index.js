@@ -20,6 +20,7 @@ const initialState = {
     sortBy: 'voteScore',
     sideBarOpen: false,
   },
+  postsByCategory: null,
 };
 
 function reducer(state = initialState, action) {
@@ -28,6 +29,7 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         posts: action.posts,
+        postsByCategory: action.postsByCategory,
       };
     case RECEIVE_CATEGORIES:
       return {
@@ -68,10 +70,14 @@ function reducer(state = initialState, action) {
       };
     case REMOVE_POST:
       const newState = Object.assign({}, state).posts;
+      const newCategories = Object.assign({}, state).postsByCategory;
+      const { category } = newState[action.postId];
       delete newState[action.postId];
+      delete newCategories[category][action.postId];
       return {
         ...state,
         posts: newState,
+        postsByCategory: newCategories,
       };
     case ADD_POST:
       return {
@@ -79,6 +85,13 @@ function reducer(state = initialState, action) {
         posts: {
           ...state.posts,
           [action.post.id]: action.post,
+        },
+        postsByCategory: {
+          ...state.postsByCategory,
+          [action.post.category]: {
+            ...state.postsByCategory[action.post.category],
+            [action.post.id]: action.post.id,
+          },
         },
       };
     case EDIT_POST:
