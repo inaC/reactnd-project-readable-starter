@@ -79,8 +79,8 @@ function reducer(state = initialState, action) {
         },
       };
     case REMOVE_POST:
-      const newState = Object.assign({}, state).posts;
-      const newCategories = Object.assign({}, state).postsByCategory;
+      const newState = Object.assign({}, state.posts);
+      const newCategories = Object.assign({}, state.postsByCategory);
       const { category } = newState[action.postId];
       delete newState[action.postId];
       delete newCategories[category][action.postId];
