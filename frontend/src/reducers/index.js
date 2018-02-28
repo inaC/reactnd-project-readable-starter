@@ -67,6 +67,16 @@ function reducer(state = initialState, action) {
           ...state.posts,
           [action.post.id]: action.post,
         },
+        postsByCategory: {
+          ...state.postsByCategory,
+          [action.post.category]: {
+            ...state.postsByCategory[action.post.category],
+            [action.post.id]: {
+              ...state.postsByCategory[action.post.category][action.post.id],
+              voteScore: action.post.voteScore,
+            }
+          },
+        },
       };
     case REMOVE_POST:
       const newState = Object.assign({}, state).posts;
@@ -90,7 +100,11 @@ function reducer(state = initialState, action) {
           ...state.postsByCategory,
           [action.post.category]: {
             ...state.postsByCategory[action.post.category],
-            [action.post.id]: action.post.id,
+            [action.post.id]: {
+              id: action.post.id,
+              voteScore: action.post.voteScore,
+              timestamp: action.post.timestamp,
+            },
           },
         },
       };

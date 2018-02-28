@@ -18,7 +18,7 @@ class SortMenu extends Component {
   render() {
     const sortByTypesDescription = {
       voteScore: 'Vote Score (biggest to lowest)',
-      createdAt: 'Creation Date (newest to oldest)',
+      timestamp: 'Creation Date (newest to oldest)',
     };
 
     return (

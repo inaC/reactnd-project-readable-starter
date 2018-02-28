@@ -10,7 +10,7 @@ import { getPosts } from '../actions';
 
 class App extends Component {
   static propTypes = {
-    postIds: PropTypes.array.isRequired,
+    postsToShow: PropTypes.array.isRequired,
     getPosts: PropTypes.func.isRequired,
   }
 
@@ -23,7 +23,7 @@ class App extends Component {
       <div className="App">
         <ApplicationBar />
         <div className="body">
-          {this.props.postIds.map(postId => (
+          {this.props.postsToShow.map(postId => (
             <div className="item" key={postId}>
               <Item
                 id={postId}
@@ -39,12 +39,18 @@ class App extends Component {
   }
 }
 
+const getPostsToShow = (state, sortBy) => {
+  const displayAll = state.ui.currentCategory === state.ui.defaultCategory;
+  let postsToShow = displayAll ? state.posts : state.postsByCategory[state.ui.currentCategory];
+  postsToShow = Object.keys(postsToShow || {}).map(id => postsToShow[id]);
+  const orderedPosts = postsToShow.sort((a, b) => b[sortBy] - a[sortBy]);
+  return orderedPosts.map(post => post.id);
+};
+
 const mapStateToProps = state => ({
-  postIds: Object.keys(state.posts || {}).filter((id) => {
-    const { currentCategory, defaultCategory } = state.ui;
-    return (currentCategory === defaultCategory || state.posts[id].category === currentCategory);
-  }),
+  postsToShow: getPostsToShow(state, state.ui.sortBy),
 });
+
 
 const mapDispatchToProps = dispatch => ({
   getPosts: () => dispatch(getPosts),

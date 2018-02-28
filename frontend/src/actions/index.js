@@ -10,7 +10,7 @@ export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const UPDATE_VOTE_SCORE = 'UPDATE_VOTE_SCORE';
 export const REMOVE_POST = 'REMOVE_POST';
 
-const fromResponseToObject = (response, type, valueToStore = null, typeUnique = true) => (
+const fromResponseToObject = (response, type, valueToStore = null, typeUnique = true, sortBy = []) => (
   Object.keys(response).reduce((accumulator, index) => {
     const auxAccumulator = Object.assign(accumulator);
     const element = response[index];
@@ -18,7 +18,11 @@ const fromResponseToObject = (response, type, valueToStore = null, typeUnique = 
     if (typeUnique) auxAccumulator[element[type]] = value;
     else {
       if (!auxAccumulator[element[type]]) auxAccumulator[element[type]] = {};
-      auxAccumulator[element[type]][value] = value;
+      auxAccumulator[element[type]][value] = { [valueToStore]: value };
+      for (const index in sortBy) {
+        const sortByType = sortBy[index];
+        auxAccumulator[element[type]][value][sortByType] = element[sortByType];
+      }
     }
     return auxAccumulator;
   }, {})
@@ -37,7 +41,7 @@ export const editPost = (post) => ({
 export const receivePosts = posts => ({
   type: RECEIVE_POSTS,
   posts: fromResponseToObject(posts, 'id'),
-  postsByCategory: fromResponseToObject(posts, 'category', 'id', false),
+  postsByCategory: fromResponseToObject(posts, 'category', 'id', false, ['voteScore', 'timestamp']),
 });
 
 export const receiveCategories = categories => ({
