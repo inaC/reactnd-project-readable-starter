@@ -63,8 +63,9 @@ class FormModal extends Component {
 
   submitForm = () => {
     const postToCreate = Object.assign({}, this.state.post);
-    postToCreate.id = Date.now().toString();
-    postToCreate.timestamp = postToCreate.id;
+    const currentTime = Date.now();
+    postToCreate.id = currentTime.toString();
+    postToCreate.timestamp = currentTime;
     postToCreate.category = this.props.categories[postToCreate.category];
     if (this.props.addItem) this.props.insertPost(postToCreate);
     else {
