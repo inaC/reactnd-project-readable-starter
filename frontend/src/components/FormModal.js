@@ -16,6 +16,8 @@ import './FormModal.css';
 class FormModal extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
+    currentCategory: PropTypes.string.isRequired,
+    defaultCategory: PropTypes.string.isRequired,
     insertPost: PropTypes.func.isRequired,
     updatePost: PropTypes.func.isRequired,
     addItem: PropTypes.bool.isRequired,
@@ -30,7 +32,7 @@ class FormModal extends Component {
       title: this.props.addItem ? '' : this.props.post.title,
       body: this.props.addItem ? '' : this.props.post.body,
       author: this.props.addItem ? '' : this.props.post.author,
-      category: this.props.addItem ? 0 : this.props.categories.indexOf(this.props.post.category),
+      category: this.props.categories.indexOf(this.props.currentCategory),
     },
   }
 
@@ -47,7 +49,7 @@ class FormModal extends Component {
   setTitle = (event, value) => this.setState(state => this.setPost(state, 'title', value))
   setBody = (event, value) => this.setState(state => this.setPost(state, 'body', value))
   setAuthor = (event, value) => this.setState(state => this.setPost(state, 'author', value))
-  openModal = () => this.setState({ open: true })
+  openModal = () => this.setState(state => ({ open: true, post: { ...state.post, category: (!this.props.addItem ? this.props.categories.indexOf(this.props.post.category) : this.props.categories.indexOf(this.props.currentCategory === this.props.defaultCategory ? this.props.categories[0] : this.props.currentCategory))} }))
   closeModal = () => this.setState({ open: false })
 
   resetForm = () => {
@@ -145,7 +147,7 @@ class FormModal extends Component {
           />
           <SelectField
             value={this.state.post.category}
-            disabled={!this.props.addItem}
+            disabled={!this.props.addItem || this.props.currentCategory !== this.props.defaultCategory}
             floatingLabelText="Select Category"
             onChange={this.setCategory}
           >
@@ -164,6 +166,8 @@ class FormModal extends Component {
 
 const mapStateToProps = state => ({
   categories: Object.keys(state.categories || {}),
+  currentCategory: state.ui.currentCategory,
+  defaultCategory: state.ui.defaultCategory,
 });
 
 const mapDispatchToProps = dispatch => ({
