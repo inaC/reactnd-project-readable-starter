@@ -27,12 +27,12 @@ class FormModal extends Component {
   state = {
     open: false,
     post: {
-      id: this.props.addItem ? '' : this.props.post.id,
-      timestamp: this.props.addItem ? '' : this.props.post.timestamp,
-      title: this.props.addItem ? '' : this.props.post.title,
-      body: this.props.addItem ? '' : this.props.post.body,
-      author: this.props.addItem ? '' : this.props.post.author,
-      category: this.props.categories.indexOf(this.props.currentCategory),
+      id: '',
+      timestamp: '',
+      title: '',
+      body: '',
+      author: '',
+      category: 0,
     },
   }
 
@@ -45,11 +45,30 @@ class FormModal extends Component {
       },
     })
 
+  setInitialCategory = () => {
+    if (!this.props.addItem) return this.props.post.category;
+    if (this.isCurrentCategoryDefault()) return this.props.categories[0];
+    return this.props.currentCategory;
+  }
+
+  setInitialStateOnOpen = () => ({
+    open: true,
+    post: {
+      id: this.props.addItem ? '' : this.props.post.id,
+      timestamp: this.props.addItem ? '' : this.props.post.timestamp,
+      title: this.props.addItem ? '' : this.props.post.title,
+      body: this.props.addItem ? '' : this.props.post.body,
+      author: this.props.addItem ? '' : this.props.post.author,
+      category: this.props.categories.indexOf(this.setInitialCategory()),
+    },
+  })
+
   setCategory = (event, index, value) => this.setState(state => this.setPost(state, 'category', value))
   setTitle = (event, value) => this.setState(state => this.setPost(state, 'title', value))
   setBody = (event, value) => this.setState(state => this.setPost(state, 'body', value))
   setAuthor = (event, value) => this.setState(state => this.setPost(state, 'author', value))
-  openModal = () => this.setState(state => ({ open: true, post: { ...state.post, category: (!this.props.addItem ? this.props.categories.indexOf(this.props.post.category) : this.props.categories.indexOf(this.props.currentCategory === this.props.defaultCategory ? this.props.categories[0] : this.props.currentCategory))} }))
+  isCurrentCategoryDefault = () => this.props.currentCategory === this.props.defaultCategory
+  openModal = () => this.setState(this.setInitialStateOnOpen())
   closeModal = () => this.setState({ open: false })
 
   resetForm = () => {
@@ -147,7 +166,7 @@ class FormModal extends Component {
           />
           <SelectField
             value={this.state.post.category}
-            disabled={!this.props.addItem || this.props.currentCategory !== this.props.defaultCategory}
+            disabled={!this.props.addItem || !this.isCurrentCategoryDefault()}
             floatingLabelText="Select Category"
             onChange={this.setCategory}
           >
@@ -174,4 +193,5 @@ const mapDispatchToProps = dispatch => ({
   insertPost: post => dispatch(insertPost(post)),
   updatePost: (id, post) => dispatch(updatePost(id, post)),
 });
+
 export default connect(mapStateToProps, mapDispatchToProps)(FormModal);
