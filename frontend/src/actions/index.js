@@ -3,6 +3,7 @@ import * as api from '../util/api';
 export const ADD_POST = 'ADD_POST';
 export const EDIT_POST = 'EDIT_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const SET_CATEGORY = 'SET_CATEGORY';
 export const SET_SORT_BY_TYPE = 'SET_SORT_BY_TYPE';
@@ -24,6 +25,7 @@ const fromResponseToObject = (response, type, valueToStore = null, typeUnique = 
         auxAccumulator[element[type]][value][sortByType] = element[sortByType];
       }
     }
+
     return auxAccumulator;
   }, {})
 );
@@ -42,6 +44,12 @@ export const receivePosts = posts => ({
   type: RECEIVE_POSTS,
   posts: fromResponseToObject(posts, 'id'),
   postsByCategory: fromResponseToObject(posts, 'category', 'id', false, ['voteScore', 'timestamp']),
+});
+
+export const receivePostComments = (postId, comments) => ({
+  type: RECEIVE_POST_COMMENTS,
+  postId,
+  comments: fromResponseToObject(comments, 'id'),
 });
 
 export const receiveCategories = categories => ({
@@ -76,6 +84,10 @@ export const removePost = post => ({
 
 export const getPosts = dispatch => (
   api.fetchPosts().then(posts => dispatch(receivePosts(posts)))
+);
+
+export const getPostComments = postId => dispatch => (
+  api.fetchPostComments(postId).then(comments => dispatch(receivePostComments(postId, comments)))
 );
 
 export const getCategories = dispatch => (
