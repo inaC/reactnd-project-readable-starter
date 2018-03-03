@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MenuItem from 'material-ui/MenuItem';
 import { getCategories, setCategory } from '../actions';
@@ -24,6 +25,7 @@ class CategoriesMenu extends Component {
           <MenuItem
             key={category}
             onClick={() => this.props.setCategory(category)}
+            containerElement={<Link to={`/${category === this.props.defaultCategory ? '' : category}`}></Link>}
             disabled={this.props.currentCategory === category}
           > {capitalize(category)}
           </MenuItem>
@@ -42,6 +44,7 @@ const formatCategories = (state) => {
 const mapStateToProps = state => ({
   categories: formatCategories(state),
   currentCategory: state.ui.currentCategory,
+  defaultCategory: state.ui.defaultCategory,
 });
 
 const mapDispatchToProps = dispatch => ({

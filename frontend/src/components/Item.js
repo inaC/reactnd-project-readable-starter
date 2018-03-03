@@ -8,6 +8,7 @@ class Item extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     post: PropTypes.object.isRequired,
+    match: PropTypes.object,
   }
 
   render() {
@@ -23,7 +24,7 @@ class Item extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  post: state.posts[ownProps.id],
+  post: state.posts[ownProps.match ? ownProps.match.params.post_id : ownProps.id],
 });
 
 export default connect(mapStateToProps)(Item);
