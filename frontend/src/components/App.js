@@ -1,31 +1,22 @@
-import AppBar from 'material-ui/AppBar';
-import React, { Component } from 'react';
+import React from 'react';
 import { MuiThemeProvider } from 'material-ui/styles';
-import { connect } from 'react-redux';
-import { getPosts, getCategories } from '../actions';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
+import ItemList from './ItemList';
+import ApplicationBar from './ApplicationBar';
+import Item from './Item';
 
-class App extends Component {
-  componentDidMount() {
-    this.props.dispatch(getPosts);
-    this.props.dispatch(getCategories);
-  }
-  render() {
-    return (
+const App = () => (
+  <MuiThemeProvider>
+    <Router>
       <div className="App">
-        <MuiThemeProvider>
-          <AppBar
-            title="Readable"
-          />
-        </MuiThemeProvider>
+        <ApplicationBar />
+        <div className="body">
+          <Route exact path="/:category/:post_id" component={Item} />
+          <Route exact path="/:category?" component={ItemList} />
+        </div>
       </div>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  categories: Object.keys(state.categories || {}),
-  posts: Object.keys(state.posts || {}).map(postId => state.posts[postId]),
-});
-
-export default connect(mapStateToProps)(App);
+    </Router>
+  </MuiThemeProvider>
+);
+export default App;
