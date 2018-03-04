@@ -1,6 +1,7 @@
 import * as api from '../util/api';
 
 export const ADD_POST = 'ADD_POST';
+export const ADD_COMMENT = 'ADD_COMMENT';
 export const EDIT_POST = 'EDIT_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
@@ -35,6 +36,11 @@ const fromResponseToObject = (response, type, valueToStore = null, typeUnique = 
 export const addPost = (post) => ({
   type: ADD_POST,
   post,
+});
+
+export const addComment = (comment) => ({
+  type: ADD_COMMENT,
+  comment,
 });
 
 export const editPost = (post) => ({
@@ -125,6 +131,10 @@ export const deleteComment = commentId => dispatch => (
 
 export const insertPost = post => dispatch => (
   api.addPost(post).then(response => dispatch(addPost({ ...response })))
+);
+
+export const insertComment = comment => dispatch => (
+  api.addComment(comment).then(response => dispatch(addComment({ ...response })))
 );
 
 export const updatePost = (id, post) => dispatch => (

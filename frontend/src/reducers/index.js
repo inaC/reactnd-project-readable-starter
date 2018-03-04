@@ -9,6 +9,7 @@ import {
   REMOVE_POST,
   REMOVE_COMMENT,
   ADD_POST,
+  ADD_COMMENT,
   EDIT_POST,
   RECEIVE_POST_COMMENTS,
 } from '../actions';
@@ -137,6 +138,17 @@ function reducer(state = initialState, action) {
               voteScore: action.post.voteScore,
               timestamp: action.post.timestamp,
             },
+          },
+        },
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [action.comment.parentId]: {
+            ...state.comments[action.comment.parentId],
+            [action.comment.id]: action.comment,
           },
         },
       };
