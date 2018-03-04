@@ -4,13 +4,13 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import { getPosts, setCategory } from '../actions';
 import ItemActions from './ItemActions';
+import CommentList from './CommentList';
 import paramTypePresent from '../util/urlParams';
 
 class Item extends Component {
   static propTypes = {
     id: PropTypes.string,
     getPosts: PropTypes.func.isRequired,
-    comments: PropTypes.object,
     post: PropTypes.object.isRequired,
     match: PropTypes.object,
     defaultCategory: PropTypes.string.isRequired,
@@ -19,30 +19,46 @@ class Item extends Component {
   }
 
   componentDidMount() {
-    if (this.props.match && this.props.post.title === null) this.props.getPosts();
-    if (paramTypePresent(this.props.match, 'category') && this.props.defaultCategory === this.props.currentCategory) {
-      this.props.setCategory(this.props.match.params.category);
+    const propMatch = this.props.match;
+    const propPost = this.props.post;
+
+    if (propMatch && Object.keys(propPost).length === 0) this.props.getPosts();
+    if (paramTypePresent(propMatch, 'category') && this.props.defaultCategory === this.props.currentCategory) {
+      this.props.setCategory(propMatch.params.category);
     }
   }
 
   renderBody = () => (<CardText> {this.props.post.body} </CardText>)
-
-  render() {
+  renderItem = () => {
+    const { post, match } = this.props;
+    const detailsPresent = paramTypePresent(match, 'category') && paramTypePresent(match, 'post_id');
     return (
-      <Card>
-        <CardHeader title={this.props.post.title} subtitle={`@${this.props.post.author}`} />
-        { this.props.match ? this.renderBody() : null }
-        <ItemActions post={this.props.post} />
-      </Card>
+      <div>
+        <Card>
+          <CardHeader title={post.title} subtitle={`@${post.author}`} />
+          { match ? this.renderBody() : null }
+          <ItemActions post={post} viewDetailsDisabled={!!detailsPresent} />
+        </Card>
+        {post.id && match ? <CommentList postId={post.id} /> : null}
+      </div>
     );
+  }
+  render() {
+    return this.props.post ? this.renderItem() : '';
   }
 }
 
+const getPostFromState = (posts, match, ownPropId) => (
+  posts[match ? match.params.post_id : ownPropId]
+);
+const findPost = (posts, match, ownPropId) => (
+  posts ? getPostFromState(posts, match, ownPropId) : {}
+);
+
 const mapStateToProps = (state, ownProps) => ({
-  post: state.posts ? state.posts[ownProps.match ? ownProps.match.params.post_id : ownProps.id] : { title: null, author: null },
+  post: findPost(state.posts, ownProps.match, ownProps.id),
   defaultCategory: state.ui.defaultCategory,
   currentCategory: state.ui.currentCategory,
-  comments: ownProps.match && state.comments ? state.comments[ownProps.match.params.post_id] : {},
 });
 
 const mapDispatchToProps = dispatch => ({

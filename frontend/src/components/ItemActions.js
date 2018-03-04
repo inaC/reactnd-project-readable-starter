@@ -20,6 +20,7 @@ class ItemActions extends Component {
     defaultCategory: PropTypes.string.isRequired,
     deletePost: PropTypes.func.isRequired,
     post: PropTypes.object.isRequired,
+    viewDetailsDisabled: PropTypes.bool.isRequired,
   }
 
   render() {
@@ -46,7 +47,7 @@ class ItemActions extends Component {
         <IconButton
           tooltip="View"
           containerElement={<Link to={`/${this.props.post.category}/${this.props.post.id}`}></Link>}
-          onClick={() => this.props.getPostComments(this.props.post.id)}
+          disabled={this.props.viewDetailsDisabled}
         >
           <ActionVisibility color="mediumpurple" />
         </IconButton>

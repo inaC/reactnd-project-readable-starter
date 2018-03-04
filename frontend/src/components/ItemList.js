@@ -5,6 +5,7 @@ import Item from './Item';
 import FormModal from './FormModal';
 import { getPosts, setCategory } from '../actions';
 import paramTypePresent from '../util/urlParams';
+import './App.css';
 
 class ItemList extends Component {
   static propTypes = {
@@ -12,11 +13,13 @@ class ItemList extends Component {
     getPosts: PropTypes.func.isRequired,
     setCategory: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired,
+    postsEmpty: PropTypes.bool.isRequired,
+    currentCategory: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
-    this.props.getPosts();
-    if (paramTypePresent(this.props.match, 'category')) {
+    if (this.props.postsEmpty) this.props.getPosts();
+    if (paramTypePresent(this.props.match, 'category') && this.props.match.params.category !== this.props.currentCategory) {
       this.props.setCategory(this.props.match.params.category);
     }
   }
@@ -49,6 +52,8 @@ const getPostsToShow = (state, sortBy, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => ({
   postsToShow: getPostsToShow(state, state.ui.sortBy, ownProps),
+  postsEmpty: state.posts === null,
+  currentCategory: state.ui.currentCategory,
 });
 
 const mapDispatchToProps = dispatch => ({
