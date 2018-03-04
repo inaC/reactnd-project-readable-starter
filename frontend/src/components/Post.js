@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import PropTypes from 'prop-types';
-import { getPosts, setCategory } from '../actions';
+import { getPosts, setCategory, displayPost } from '../actions';
 import PostActions from './PostActions';
 import CommentList from './CommentList';
 import paramTypePresent from '../util/urlParams';
@@ -18,15 +18,18 @@ class Post extends Component {
     defaultCategory: PropTypes.string.isRequired,
     currentCategory: PropTypes.string.isRequired,
     setCategory: PropTypes.func.isRequired,
+    displayPost: PropTypes.func.isRequired,
   }
 
   componentDidMount() {
     const propMatch = this.props.match;
     const propPost = this.props.post;
-
     if (propMatch && Object.keys(propPost).length === 0) this.props.getPosts();
     if (paramTypePresent(propMatch, 'category') && this.props.defaultCategory === this.props.currentCategory) {
       this.props.setCategory(propMatch.params.category);
+    }
+    if (paramTypePresent(propMatch, 'category') && paramTypePresent(propMatch, 'post_id')) {
+      this.props.displayPost(true);
     }
   }
 
@@ -69,6 +72,7 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = dispatch => ({
   getPosts: () => dispatch(getPosts),
   setCategory: category => dispatch(setCategory(category)),
+  displayPost: boolean => dispatch(displayPost(boolean)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
