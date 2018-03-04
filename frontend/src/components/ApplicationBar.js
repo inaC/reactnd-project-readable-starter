@@ -7,20 +7,24 @@ import IconButton from 'material-ui/IconButton';
 import { toggleSideBar } from '../actions';
 import SideBar from './SideBar';
 import SortMenu from './SortMenu';
-import capitalize from '../util/stringPresenter';
+import { capitalize, handlePluralizeWith } from '../util/stringPresenter';
 
 class ApplicationBar extends Component {
   static propTypes = {
     currentCategory: PropTypes.string.isRequired,
     sideBarOpen: PropTypes.bool.isRequired,
     toggleSideBar: PropTypes.func.isRequired,
+    displayPost: PropTypes.bool.isRequired,
   }
 
+  setTitle = () => (
+    `${this.props.currentCategory} ${handlePluralizeWith('post', !this.props.displayPost)}`
+  )
   render() {
     return (
       <div className="applicationBar">
         <AppBar
-          title={`${this.props.currentCategory} posts`}
+          title={this.setTitle()}
           iconElementLeft={<IconButton tooltip="Categories"><NavigationMenu /></IconButton>}
           iconElementRight={<SortMenu />}
           onLeftIconButtonClick={() => this.props.toggleSideBar(!this.props.sideBarOpen)}
@@ -34,6 +38,7 @@ class ApplicationBar extends Component {
 const mapStateToProps = state => ({
   currentCategory: capitalize(state.ui.currentCategory),
   sideBarOpen: state.ui.sideBarOpen,
+  displayPost: state.ui.displayPost,
 });
 
 const mapDispatchToProps = dispatch => ({

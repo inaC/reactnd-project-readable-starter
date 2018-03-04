@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MenuItem from 'material-ui/MenuItem';
 import { getCategories, setCategory } from '../actions';
-import capitalize from '../util/stringPresenter';
+import { capitalize } from '../util/stringPresenter';
 
 class CategoriesMenu extends Component {
   static propTypes = {
@@ -12,6 +12,7 @@ class CategoriesMenu extends Component {
     getCategories: PropTypes.func.isRequired,
     setCategory: PropTypes.func.isRequired,
     currentCategory: PropTypes.string.isRequired,
+    displayPost: PropTypes.bool.isRequired,
   }
 
   componentDidMount() {
@@ -26,7 +27,7 @@ class CategoriesMenu extends Component {
             key={category}
             onClick={() => this.props.setCategory(category)}
             containerElement={<Link to={`/${category === this.props.defaultCategory ? '' : category}`}></Link>}
-            disabled={this.props.currentCategory === category}
+            disabled={this.props.currentCategory === category && !this.props.displayPost}
           > {capitalize(category)}
           </MenuItem>
         ))}
@@ -45,6 +46,7 @@ const mapStateToProps = state => ({
   categories: formatCategories(state),
   currentCategory: state.ui.currentCategory,
   defaultCategory: state.ui.defaultCategory,
+  displayPost: state.ui.displayPost,
 });
 
 const mapDispatchToProps = dispatch => ({
