@@ -3,6 +3,7 @@ import * as api from '../util/api';
 export const ADD_POST = 'ADD_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const EDIT_POST = 'EDIT_POST';
+export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
@@ -46,6 +47,11 @@ export const addComment = (comment) => ({
 export const editPost = (post) => ({
   type: EDIT_POST,
   post,
+});
+
+export const editComment = (comment) => ({
+  type: EDIT_COMMENT,
+  comment,
 });
 
 export const receivePosts = posts => ({
@@ -139,4 +145,8 @@ export const insertComment = comment => dispatch => (
 
 export const updatePost = (id, post) => dispatch => (
   api.editPost(id, post).then(response => dispatch(editPost({ ...response })))
+);
+
+export const updateComment = (id, comment) => dispatch => (
+  api.editComment(id, comment).then(response => dispatch(editComment({ ...response })))
 );

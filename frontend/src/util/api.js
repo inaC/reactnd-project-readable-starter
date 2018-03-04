@@ -74,3 +74,13 @@ export const editPost = (id, post) =>
     },
     body: JSON.stringify({ ...post })
   }).then(res => res.json());
+
+export const editComment = (id, comment) =>
+  fetch(`${api}/comments/${id}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ ...comment })
+  }).then(res => res.json());

@@ -11,6 +11,7 @@ import {
   ADD_POST,
   ADD_COMMENT,
   EDIT_POST,
+  EDIT_COMMENT,
   RECEIVE_POST_COMMENTS,
 } from '../actions';
 
@@ -158,6 +159,17 @@ function reducer(state = initialState, action) {
         posts: {
           ...state.posts,
           [action.post.id]: action.post,
+        },
+      };
+    case EDIT_COMMENT:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [action.comment.parentId]: {
+            ...state.comments[action.comment.parentId],
+            [action.comment.id]: action.comment,
+          },
         },
       };
     default: return state;
