@@ -5,6 +5,7 @@ import {
   SET_SORT_BY_TYPE,
   TOGGLE_SIDEBAR,
   UPDATE_VOTE_SCORE_POST,
+  UPDATE_VOTE_SCORE_COMMENT,
   REMOVE_POST,
   ADD_POST,
   EDIT_POST,
@@ -84,6 +85,17 @@ function reducer(state = initialState, action) {
               ...state.postsByCategory[action.post.category][action.post.id],
               voteScore: action.post.voteScore,
             },
+          },
+        },
+      };
+    case UPDATE_VOTE_SCORE_COMMENT:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [action.comment.parentId]: {
+            ...state.comments[action.comment.parentId],
+            [action.comment.id]: action.comment,
           },
         },
       };

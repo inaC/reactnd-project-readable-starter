@@ -9,6 +9,7 @@ export const SET_CATEGORY = 'SET_CATEGORY';
 export const SET_SORT_BY_TYPE = 'SET_SORT_BY_TYPE';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const UPDATE_VOTE_SCORE_POST = 'UPDATE_VOTE_SCORE_POST';
+export const UPDATE_VOTE_SCORE_COMMENT = 'UPDATE_VOTE_SCORE_COMMENT';
 export const REMOVE_POST = 'REMOVE_POST';
 
 const fromResponseToObject = (response, type, valueToStore = null, typeUnique = true, sortBy = []) => (
@@ -77,6 +78,11 @@ export const updateVoteScorePost = post => ({
   post,
 });
 
+export const updateVoteScoreComment = comment => ({
+  type: UPDATE_VOTE_SCORE_COMMENT,
+  comment,
+});
+
 export const removePost = post => ({
   type: REMOVE_POST,
   postId: post.id,
@@ -96,6 +102,10 @@ export const getCategories = dispatch => (
 
 export const putVoteScorePost = (postId, option) => dispatch => (
   api.votePost(postId, option).then(post => dispatch(updateVoteScorePost(post)))
+);
+
+export const putVoteScoreComment = (commentId, option) => dispatch => (
+  api.voteComment(commentId, option).then(comment => dispatch(updateVoteScoreComment(comment)))
 );
 
 export const deletePost = postId => dispatch => (
