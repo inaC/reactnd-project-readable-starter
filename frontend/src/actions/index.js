@@ -8,7 +8,7 @@ export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const SET_CATEGORY = 'SET_CATEGORY';
 export const SET_SORT_BY_TYPE = 'SET_SORT_BY_TYPE';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
-export const UPDATE_VOTE_SCORE = 'UPDATE_VOTE_SCORE';
+export const UPDATE_VOTE_SCORE_POST = 'UPDATE_VOTE_SCORE_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 
 const fromResponseToObject = (response, type, valueToStore = null, typeUnique = true, sortBy = []) => (
@@ -73,7 +73,7 @@ export const toggleSideBar = boolean => ({
 });
 
 export const updateVoteScorePost = post => ({
-  type: UPDATE_VOTE_SCORE,
+  type: UPDATE_VOTE_SCORE_POST,
   post,
 });
 

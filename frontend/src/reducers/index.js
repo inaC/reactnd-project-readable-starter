@@ -4,7 +4,7 @@ import {
   SET_CATEGORY,
   SET_SORT_BY_TYPE,
   TOGGLE_SIDEBAR,
-  UPDATE_VOTE_SCORE,
+  UPDATE_VOTE_SCORE_POST,
   REMOVE_POST,
   ADD_POST,
   EDIT_POST,
@@ -69,7 +69,7 @@ function reducer(state = initialState, action) {
           sideBarOpen: action.sideBarOpen,
         },
       };
-    case UPDATE_VOTE_SCORE:
+    case UPDATE_VOTE_SCORE_POST:
       return {
         ...state,
         posts: {
