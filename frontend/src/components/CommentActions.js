@@ -7,38 +7,38 @@ import ActionStars from 'material-ui/svg-icons/action/stars';
 import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
 import ActionThumbDown from 'material-ui/svg-icons/action/thumb-down';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
-import { putVoteScorePost, deletePost } from '../actions';
-import FormModal from './FormModal';
+import { putVoteScoreComment, deleteComment } from '../actions';
+import CommentForm from './CommentForm';
 
 class CommentActions extends Component {
   static propTypes = {
-    putVoteScorePost: PropTypes.func.isRequired,
-    deletePost: PropTypes.func.isRequired,
-    post: PropTypes.object.isRequired,
+    putVoteScoreComment: PropTypes.func.isRequired,
+    deleteComment: PropTypes.func.isRequired,
+    comment: PropTypes.object.isRequired,
   }
 
   render() {
     return (
       <CardActions>
-        <IconButton tooltip={`Vote score: ${this.props.post.voteScore}`} style={{ cursor: 'initial' }} disableTouchRipple>
+        <IconButton tooltip={`Vote score: ${this.props.comment.voteScore}`} style={{ cursor: 'initial' }} disableTouchRipple>
           <ActionStars />
         </IconButton>
         <IconButton
           tooltip="Like"
-          onClick={() => this.props.putVoteScorePost(this.props.post.id, 'upVote')}
+          onClick={() => this.props.putVoteScoreComment(this.props.comment.id, 'upVote')}
         >
           <ActionThumbUp color="limegreen" />
         </IconButton>
         <IconButton
           tooltip="Dislike"
-          onClick={() => this.props.putVoteScorePost(this.props.post.id, 'downVote')}
+          onClick={() => this.props.putVoteScoreComment(this.props.comment.id, 'downVote')}
         >
           <ActionThumbDown color="red" />
         </IconButton>
-        <FormModal addItem={false} post={this.props.post} />
+        <CommentForm addItem={false} comment={this.props.comment} parentId={this.props.comment.parentId}/>
         <IconButton
           tooltip="Delete"
-          onClick={() => this.props.deletePost(this.props.post.id)}
+          onClick={() => this.props.deleteComment(this.props.comment.id)}
         >
           <ActionDelete color="brown" />
         </IconButton>
@@ -48,8 +48,8 @@ class CommentActions extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  putVoteScorePost: (postId, option) => dispatch(putVoteScorePost(postId, option)),
-  deletePost: postId => dispatch(deletePost(postId)),
+  putVoteScoreComment: (commentId, option) => dispatch(putVoteScoreComment(commentId, option)),
+  deleteComment: commentId => dispatch(deleteComment(commentId)),
 });
 
 export default connect(null, mapDispatchToProps)(CommentActions);
