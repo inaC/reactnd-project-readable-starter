@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { CardActions } from 'material-ui/Card';
@@ -10,42 +10,38 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { putVoteScoreComment, deleteComment } from '../actions';
 import CommentForm from './CommentForm';
 
-class CommentActions extends Component {
-  static propTypes = {
-    putVoteScoreComment: PropTypes.func.isRequired,
-    deleteComment: PropTypes.func.isRequired,
-    comment: PropTypes.object.isRequired,
-  }
+const CommentActions = props => (
+  <CardActions>
+    <IconButton tooltip={`Vote score: ${props.comment.voteScore}`} style={{ cursor: 'initial' }} disableTouchRipple>
+      <ActionStars />
+    </IconButton>
+    <IconButton
+      tooltip="Like"
+      onClick={() => props.putVoteScoreComment(props.comment.id, 'upVote')}
+    >
+      <ActionThumbUp color="limegreen" />
+    </IconButton>
+    <IconButton
+      tooltip="Dislike"
+      onClick={() => props.putVoteScoreComment(props.comment.id, 'downVote')}
+    >
+      <ActionThumbDown color="red" />
+    </IconButton>
+    <CommentForm addItem={false} comment={props.comment} parentId={props.comment.parentId}/>
+    <IconButton
+      tooltip="Delete"
+      onClick={() => props.deleteComment(props.comment.id)}
+    >
+      <ActionDelete color="brown" />
+    </IconButton>
+  </CardActions>
+);
 
-  render() {
-    return (
-      <CardActions>
-        <IconButton tooltip={`Vote score: ${this.props.comment.voteScore}`} style={{ cursor: 'initial' }} disableTouchRipple>
-          <ActionStars />
-        </IconButton>
-        <IconButton
-          tooltip="Like"
-          onClick={() => this.props.putVoteScoreComment(this.props.comment.id, 'upVote')}
-        >
-          <ActionThumbUp color="limegreen" />
-        </IconButton>
-        <IconButton
-          tooltip="Dislike"
-          onClick={() => this.props.putVoteScoreComment(this.props.comment.id, 'downVote')}
-        >
-          <ActionThumbDown color="red" />
-        </IconButton>
-        <CommentForm addItem={false} comment={this.props.comment} parentId={this.props.comment.parentId}/>
-        <IconButton
-          tooltip="Delete"
-          onClick={() => this.props.deleteComment(this.props.comment.id)}
-        >
-          <ActionDelete color="brown" />
-        </IconButton>
-      </CardActions>
-    );
-  }
-}
+CommentActions.propTypes = {
+  putVoteScoreComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  comment: PropTypes.object.isRequired,
+};
 
 const mapDispatchToProps = dispatch => ({
   putVoteScoreComment: (commentId, option) => dispatch(putVoteScoreComment(commentId, option)),

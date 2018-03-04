@@ -1,24 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Card, CardHeader } from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import CommentActions from './CommentActions';
 import './App.css';
 
-class Comment extends Component {
-  static propTypes = {
-    comment: PropTypes.object.isRequired,
-  }
+const Comment = props => (
+  <div className="comment">
+    <Card>
+      <CardHeader title={props.comment.body} subtitle={`@${props.comment.author}`} />
+      <CommentActions comment={props.comment} />
+    </Card>
+  </div>
+);
 
-  render() {
-    return (
-      <div className="comment">
-        <Card>
-          <CardHeader title={this.props.comment.body} subtitle={`@${this.props.comment.author}`} />
-          <CommentActions comment={this.props.comment} />
-        </Card>
-      </div>
-    );
-  }
-}
+Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+};
+
 export default Comment;
 
