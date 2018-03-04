@@ -4,10 +4,15 @@ import {
   SET_CATEGORY,
   SET_SORT_BY_TYPE,
   TOGGLE_SIDEBAR,
-  UPDATE_VOTE_SCORE,
+  UPDATE_VOTE_SCORE_POST,
+  UPDATE_VOTE_SCORE_COMMENT,
   REMOVE_POST,
+  REMOVE_COMMENT,
   ADD_POST,
+  ADD_COMMENT,
   EDIT_POST,
+  EDIT_COMMENT,
+  RECEIVE_POST_COMMENTS,
 } from '../actions';
 
 const initialState = {
@@ -30,6 +35,14 @@ function reducer(state = initialState, action) {
         ...state,
         posts: action.posts,
         postsByCategory: action.postsByCategory,
+      };
+    case RECEIVE_POST_COMMENTS:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [action.postId]: action.comments,
+        },
       };
     case RECEIVE_CATEGORIES:
       return {
@@ -60,7 +73,7 @@ function reducer(state = initialState, action) {
           sideBarOpen: action.sideBarOpen,
         },
       };
-    case UPDATE_VOTE_SCORE:
+    case UPDATE_VOTE_SCORE_POST:
       return {
         ...state,
         posts: {
@@ -74,20 +87,41 @@ function reducer(state = initialState, action) {
             [action.post.id]: {
               ...state.postsByCategory[action.post.category][action.post.id],
               voteScore: action.post.voteScore,
-            }
+            },
+          },
+        },
+      };
+    case UPDATE_VOTE_SCORE_COMMENT:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [action.comment.parentId]: {
+            ...state.comments[action.comment.parentId],
+            [action.comment.id]: action.comment,
           },
         },
       };
     case REMOVE_POST:
-      const newState = Object.assign({}, state.posts);
-      const newCategories = Object.assign({}, state.postsByCategory);
-      const { category } = newState[action.postId];
-      delete newState[action.postId];
-      delete newCategories[category][action.postId];
+      const posts = Object.assign({}, state.posts);
+      const postsByCategory = Object.assign({}, state.postsByCategory);
+      const comments = Object.assign({}, state.comments);
+      const { category } = posts[action.postId];
+      delete posts[action.postId];
+      delete postsByCategory[category][action.postId];
+      delete comments[action.postId];
       return {
         ...state,
-        posts: newState,
-        postsByCategory: newCategories,
+        posts,
+        postsByCategory,
+        comments,
+      };
+    case REMOVE_COMMENT:
+      const newComments = Object.assign({}, state.comments);
+      delete newComments[action.postId][action.commentId];
+      return {
+        ...state,
+        comments: newComments,
       };
     case ADD_POST:
       return {
@@ -108,12 +142,34 @@ function reducer(state = initialState, action) {
           },
         },
       };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [action.comment.parentId]: {
+            ...state.comments[action.comment.parentId],
+            [action.comment.id]: action.comment,
+          },
+        },
+      };
     case EDIT_POST:
       return {
         ...state,
         posts: {
           ...state.posts,
           [action.post.id]: action.post,
+        },
+      };
+    case EDIT_COMMENT:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [action.comment.parentId]: {
+            ...state.comments[action.comment.parentId],
+            [action.comment.id]: action.comment,
+          },
         },
       };
     default: return state;

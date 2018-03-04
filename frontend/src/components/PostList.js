@@ -1,22 +1,25 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Item from './Item';
-import FormModal from './FormModal';
+import Post from './Post';
+import PostForm from './PostForm';
 import { getPosts, setCategory } from '../actions';
 import paramTypePresent from '../util/urlParams';
+import './App.css';
 
-class ItemList extends Component {
+class PostList extends Component {
   static propTypes = {
     postsToShow: PropTypes.array.isRequired,
     getPosts: PropTypes.func.isRequired,
     setCategory: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired,
+    postsEmpty: PropTypes.bool.isRequired,
+    currentCategory: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
-    this.props.getPosts();
-    if (paramTypePresent(this.props.match, 'category')) {
+    if (this.props.postsEmpty) this.props.getPosts();
+    if (paramTypePresent(this.props.match, 'category') && this.props.match.params.category !== this.props.currentCategory) {
       this.props.setCategory(this.props.match.params.category);
     }
   }
@@ -26,11 +29,11 @@ class ItemList extends Component {
       <div>
         {this.props.postsToShow.map(postId => (
           <div className="item" key={postId}>
-            <Item id={postId} />
+            <Post id={postId} />
           </div>
         ))}
         <div className="addItem">
-          <FormModal addItem />
+          <PostForm addItem />
         </div>
       </div>
     );
@@ -49,6 +52,8 @@ const getPostsToShow = (state, sortBy, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => ({
   postsToShow: getPostsToShow(state, state.ui.sortBy, ownProps),
+  postsEmpty: state.posts === null,
+  currentCategory: state.ui.currentCategory,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -56,4 +61,4 @@ const mapDispatchToProps = dispatch => ({
   setCategory: category => dispatch(setCategory(category)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemList);
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);
