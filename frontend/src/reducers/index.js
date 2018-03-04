@@ -122,6 +122,13 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         comments: newComments,
+        posts: {
+          ...state.posts,
+          [action.postId]: {
+            ...state.posts[action.postId],
+            commentCount: state.posts[action.postId].commentCount - 1,
+          },
+        },
       };
     case ADD_POST:
       return {
@@ -150,6 +157,13 @@ function reducer(state = initialState, action) {
           [action.comment.parentId]: {
             ...state.comments[action.comment.parentId],
             [action.comment.id]: action.comment,
+          },
+        },
+        posts: {
+          ...state.posts,
+          [action.comment.parentId]: {
+            ...state.posts[action.comment.parentId],
+            commentCount: state.posts[action.comment.parentId].commentCount + 1,
           },
         },
       };
