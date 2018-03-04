@@ -6,12 +6,14 @@ import { getPosts, setCategory } from '../actions';
 import PostActions from './PostActions';
 import CommentList from './CommentList';
 import paramTypePresent from '../util/urlParams';
+import NotFound from './NotFound';
+import './App.css';
 
 class Post extends Component {
   static propTypes = {
     id: PropTypes.string,
     getPosts: PropTypes.func.isRequired,
-    post: PropTypes.object.isRequired,
+    post: PropTypes.object,
     match: PropTypes.object,
     defaultCategory: PropTypes.string.isRequired,
     currentCategory: PropTypes.string.isRequired,
@@ -28,23 +30,26 @@ class Post extends Component {
     }
   }
 
-  renderBody = () => (<CardText> {this.props.post.body} </CardText>)
-  renderPost = () => {
-    const { post, match } = this.props;
-    const detailsPresent = paramTypePresent(match, 'category') && paramTypePresent(match, 'post_id');
-    return (
-      <div>
-        <Card>
-          <CardHeader title={post.title} subtitle={`@${post.author}`} />
-          { match ? this.renderBody() : null }
-          <PostActions post={post} viewDetailsDisabled={!!detailsPresent} />
-        </Card>
-        {post.id && match ? <CommentList postId={post.id} /> : null}
-      </div>
-    );
-  }
+  postIdParamPresent = match => paramTypePresent(match, 'category') && paramTypePresent(match, 'post_id')
+  renderNotFound = () => <NotFound />
+  renderBody = () => <CardText> {this.props.post.body} </CardText>
+
+  renderPost = (post, match, postIdParamPresent) => (
+    <div>
+      <Card>
+        <CardHeader title={post.title} subtitle={`@${post.author}`} />
+        { match ? this.renderBody() : null }
+        <PostActions post={post} viewDetailsDisabled={!!postIdParamPresent} />
+      </Card>
+      {post.id && match ? <CommentList postId={post.id} /> : null}
+    </div>
+  );
+
   render() {
-    return this.props.post ? this.renderPost() : '';
+    const { post, match } = this.props;
+    const postIdParamPresent = this.postIdParamPresent(match);
+    const postNotFound = !!postIdParamPresent && Object.keys(post || {}).length === 0;
+    return postNotFound ? this.renderNotFound() : this.renderPost(post, match, postIdParamPresent);
   }
 }
 
