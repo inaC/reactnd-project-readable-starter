@@ -13,7 +13,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { insertPost, updatePost } from '../actions';
 import './FormModal.css';
 
-class FormModal extends Component {
+class PostForm extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
     currentCategory: PropTypes.string.isRequired,
@@ -194,4 +194,4 @@ const mapDispatchToProps = dispatch => ({
   updatePost: (id, post) => dispatch(updatePost(id, post)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormModal);
+export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

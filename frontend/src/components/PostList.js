@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Item from './Item';
-import FormModal from './FormModal';
+import Post from './Post';
+import PostForm from './PostForm';
 import { getPosts, setCategory } from '../actions';
 import paramTypePresent from '../util/urlParams';
 import './App.css';
 
-class ItemList extends Component {
+class PostList extends Component {
   static propTypes = {
     postsToShow: PropTypes.array.isRequired,
     getPosts: PropTypes.func.isRequired,
@@ -29,11 +29,11 @@ class ItemList extends Component {
       <div>
         {this.props.postsToShow.map(postId => (
           <div className="item" key={postId}>
-            <Item id={postId} />
+            <Post id={postId} />
           </div>
         ))}
         <div className="addItem">
-          <FormModal addItem />
+          <PostForm addItem />
         </div>
       </div>
     );
@@ -61,4 +61,4 @@ const mapDispatchToProps = dispatch => ({
   setCategory: category => dispatch(setCategory(category)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemList);
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);

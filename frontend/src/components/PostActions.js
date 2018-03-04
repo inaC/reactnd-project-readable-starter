@@ -11,9 +11,9 @@ import ActionVisibility from 'material-ui/svg-icons/action/visibility';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import CommunicationForum from 'material-ui/svg-icons/communication/forum';
 import { putVoteScorePost, deletePost, getPostComments } from '../actions';
-import FormModal from './FormModal';
+import PostForm from './PostForm';
 
-class ItemActions extends Component {
+class PostActions extends Component {
   static propTypes = {
     putVoteScorePost: PropTypes.func.isRequired,
     currentCategory: PropTypes.string.isRequired,
@@ -51,7 +51,7 @@ class ItemActions extends Component {
         >
           <ActionVisibility color="mediumpurple" />
         </IconButton>
-        <FormModal addItem={false} post={this.props.post} />
+        <PostForm addItem={false} post={this.props.post} />
         <IconButton
           tooltip="Delete"
           onClick={() => this.props.deletePost(this.props.post.id)}
@@ -75,4 +75,4 @@ const mapStateToProps = state => ({
   defaultCategory: state.ui.defaultCategory,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemActions);
+export default connect(mapStateToProps, mapDispatchToProps)(PostActions);

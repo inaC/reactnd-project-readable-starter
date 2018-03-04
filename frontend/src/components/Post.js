@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import { getPosts, setCategory } from '../actions';
-import ItemActions from './ItemActions';
+import PostActions from './PostActions';
 import CommentList from './CommentList';
 import paramTypePresent from '../util/urlParams';
 
-class Item extends Component {
+class Post extends Component {
   static propTypes = {
     id: PropTypes.string,
     getPosts: PropTypes.func.isRequired,
@@ -29,7 +29,7 @@ class Item extends Component {
   }
 
   renderBody = () => (<CardText> {this.props.post.body} </CardText>)
-  renderItem = () => {
+  renderPost = () => {
     const { post, match } = this.props;
     const detailsPresent = paramTypePresent(match, 'category') && paramTypePresent(match, 'post_id');
     return (
@@ -37,14 +37,14 @@ class Item extends Component {
         <Card>
           <CardHeader title={post.title} subtitle={`@${post.author}`} />
           { match ? this.renderBody() : null }
-          <ItemActions post={post} viewDetailsDisabled={!!detailsPresent} />
+          <PostActions post={post} viewDetailsDisabled={!!detailsPresent} />
         </Card>
         {post.id && match ? <CommentList postId={post.id} /> : null}
       </div>
     );
   }
   render() {
-    return this.props.post ? this.renderItem() : '';
+    return this.props.post ? this.renderPost() : '';
   }
 }
 
@@ -66,4 +66,4 @@ const mapDispatchToProps = dispatch => ({
   setCategory: category => dispatch(setCategory(category)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Item);
+export default connect(mapStateToProps, mapDispatchToProps)(Post);
