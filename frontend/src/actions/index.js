@@ -11,6 +11,7 @@ export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const UPDATE_VOTE_SCORE_POST = 'UPDATE_VOTE_SCORE_POST';
 export const UPDATE_VOTE_SCORE_COMMENT = 'UPDATE_VOTE_SCORE_COMMENT';
 export const REMOVE_POST = 'REMOVE_POST';
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 
 const fromResponseToObject = (response, type, valueToStore = null, typeUnique = true, sortBy = []) => (
   Object.keys(response).reduce((accumulator, index) => {
@@ -88,6 +89,12 @@ export const removePost = post => ({
   postId: post.id,
 });
 
+export const removeComment = comment => ({
+  type: REMOVE_COMMENT,
+  postId: comment.parentId,
+  commentId: comment.id,
+});
+
 export const getPosts = dispatch => (
   api.fetchPosts().then(posts => dispatch(receivePosts(posts)))
 );
@@ -110,6 +117,10 @@ export const putVoteScoreComment = (commentId, option) => dispatch => (
 
 export const deletePost = postId => dispatch => (
   api.deletePost(postId).then(post => dispatch(removePost(post)))
+);
+
+export const deleteComment = commentId => dispatch => (
+  api.deleteComment(commentId).then(comment => dispatch(removeComment(comment)))
 );
 
 export const insertPost = post => dispatch => (

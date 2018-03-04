@@ -7,6 +7,7 @@ import {
   UPDATE_VOTE_SCORE_POST,
   UPDATE_VOTE_SCORE_COMMENT,
   REMOVE_POST,
+  REMOVE_COMMENT,
   ADD_POST,
   EDIT_POST,
   RECEIVE_POST_COMMENTS,
@@ -112,6 +113,13 @@ function reducer(state = initialState, action) {
         posts,
         postsByCategory,
         comments,
+      };
+    case REMOVE_COMMENT:
+      const newComments = Object.assign({}, state.comments);
+      delete newComments[action.postId][action.commentId];
+      return {
+        ...state,
+        comments: newComments,
       };
     case ADD_POST:
       return {
