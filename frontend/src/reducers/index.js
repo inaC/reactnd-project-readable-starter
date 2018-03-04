@@ -3,6 +3,7 @@ import {
   RECEIVE_CATEGORIES,
   SET_CATEGORY,
   SET_SORT_BY_TYPE,
+  DISPLAY_POST,
   TOGGLE_SIDEBAR,
   UPDATE_VOTE_SCORE_POST,
   UPDATE_VOTE_SCORE_COMMENT,
@@ -24,6 +25,7 @@ const initialState = {
     currentCategory: 'All',
     sortBy: 'voteScore',
     sideBarOpen: false,
+    displayPost: false,
   },
   postsByCategory: null,
 };
@@ -55,6 +57,7 @@ function reducer(state = initialState, action) {
         ui: {
           ...state.ui,
           currentCategory: action.category,
+          displayPost: false,
         },
       };
     case SET_SORT_BY_TYPE:
@@ -63,6 +66,14 @@ function reducer(state = initialState, action) {
         ui: {
           ...state.ui,
           sortBy: action.sortBy,
+        },
+      };
+    case DISPLAY_POST:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          displayPost: action.displayPost,
         },
       };
     case TOGGLE_SIDEBAR:

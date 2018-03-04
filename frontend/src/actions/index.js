@@ -10,6 +10,7 @@ export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const SET_CATEGORY = 'SET_CATEGORY';
 export const SET_SORT_BY_TYPE = 'SET_SORT_BY_TYPE';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+export const DISPLAY_POST = 'DISPLAY_POST';
 export const UPDATE_VOTE_SCORE_POST = 'UPDATE_VOTE_SCORE_POST';
 export const UPDATE_VOTE_SCORE_COMMENT = 'UPDATE_VOTE_SCORE_COMMENT';
 export const REMOVE_POST = 'REMOVE_POST';
@@ -84,6 +85,11 @@ export const setSortByType = sortType => ({
 export const toggleSideBar = boolean => ({
   type: TOGGLE_SIDEBAR,
   sideBarOpen: boolean,
+});
+
+export const displayPost = boolean => ({
+  type: DISPLAY_POST,
+  displayPost: boolean,
 });
 
 export const updateVoteScorePost = post => ({
