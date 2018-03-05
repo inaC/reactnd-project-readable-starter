@@ -35,22 +35,22 @@ const fromResponseToObject = (response, type, valueToStore = null, typeUnique = 
   }, {})
 );
 
-export const addPost = (post) => ({
+export const addPost = post => ({
   type: ADD_POST,
   post,
 });
 
-export const addComment = (comment) => ({
+export const addComment = comment => ({
   type: ADD_COMMENT,
   comment,
 });
 
-export const editPost = (post) => ({
+export const editPost = post => ({
   type: EDIT_POST,
   post,
 });
 
-export const editComment = (comment) => ({
+export const editComment = comment => ({
   type: EDIT_COMMENT,
   comment,
 });
