@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Post from './Post';
 import PostForm from './PostForm';
-import { getPosts, setCategory } from '../actions';
+import { getPosts, setCategory, displayPost } from '../actions';
 import paramTypePresent from '../util/urlParams';
 import './App.css';
 
@@ -12,6 +12,7 @@ class PostList extends Component {
     postsToShow: PropTypes.array.isRequired,
     getPosts: PropTypes.func.isRequired,
     setCategory: PropTypes.func.isRequired,
+    displayPost: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired,
     postsEmpty: PropTypes.bool.isRequired,
     currentCategory: PropTypes.string.isRequired,
@@ -22,6 +23,7 @@ class PostList extends Component {
     if (paramTypePresent(this.props.match, 'category') && this.props.match.params.category !== this.props.currentCategory) {
       this.props.setCategory(this.props.match.params.category);
     }
+    this.props.displayPost(false);
   }
 
   render() {
@@ -59,6 +61,7 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = dispatch => ({
   getPosts: () => dispatch(getPosts),
   setCategory: category => dispatch(setCategory(category)),
+  displayPost: boolean => dispatch(displayPost(boolean)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);
