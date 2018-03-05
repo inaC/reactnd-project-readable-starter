@@ -134,7 +134,7 @@ class CommentForm extends Component {
             floatingLabelText="Body"
             fullWidth
             multiLine
-            rows={3}
+            rows={2}
             rowsMax={5}
             defaultValue={this.state.comment.body}
             onChange={this.setBody}
