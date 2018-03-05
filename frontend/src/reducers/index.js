@@ -126,6 +126,10 @@ function reducer(state = initialState, action) {
         posts,
         postsByCategory,
         comments,
+        ui: {
+          ...state.ui,
+          displayPost: false,
+        },
       };
     case REMOVE_COMMENT:
       const newComments = Object.assign({}, state.comments);
