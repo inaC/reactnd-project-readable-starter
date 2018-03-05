@@ -2,38 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { CardActions } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import ActionStars from 'material-ui/svg-icons/action/stars';
-import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
-import ActionThumbDown from 'material-ui/svg-icons/action/thumb-down';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { putVoteScoreComment, deleteComment } from '../actions';
 import CommentForm from './CommentForm';
+import DisplayVoteScore from './DisplayVoteScore';
+import ActionLike from './ActionLike';
+import ActionDislike from './ActionDislike';
+import ActionDeleteItem from './ActionDeleteItem';
 
 const CommentActions = props => (
   <CardActions>
-    <IconButton tooltip={`Vote score: ${props.comment.voteScore}`} style={{ cursor: 'initial' }} disableTouchRipple>
-      <ActionStars />
-    </IconButton>
-    <IconButton
-      tooltip="Like"
-      onClick={() => props.putVoteScoreComment(props.comment.id, 'upVote')}
-    >
-      <ActionThumbUp color="limegreen" />
-    </IconButton>
-    <IconButton
-      tooltip="Dislike"
-      onClick={() => props.putVoteScoreComment(props.comment.id, 'downVote')}
-    >
-      <ActionThumbDown color="red" />
-    </IconButton>
+    <DisplayVoteScore voteScore={props.comment.voteScore} />
+    <ActionLike action={() => props.putVoteScoreComment(props.comment.id, 'upVote')} />
+    <ActionDislike action={() => props.putVoteScoreComment(props.comment.id, 'downVote')} />
     <CommentForm addItem={false} comment={props.comment} parentId={props.comment.parentId} />
-    <IconButton
-      tooltip="Delete"
-      onClick={() => props.deleteComment(props.comment.id)}
-    >
-      <ActionDelete color="brown" />
-    </IconButton>
+    <ActionDeleteItem action={() => props.deleteComment(props.comment.id)} />
   </CardActions>
 );
 
