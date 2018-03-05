@@ -9,7 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import { insertComment, updateComment } from '../actions';
-import './FormModal.css';
+import './App.css';
 
 class CommentForm extends Component {
   static propTypes = {

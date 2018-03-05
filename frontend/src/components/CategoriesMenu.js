@@ -12,6 +12,7 @@ class CategoriesMenu extends Component {
     getCategories: PropTypes.func.isRequired,
     setCategory: PropTypes.func.isRequired,
     currentCategory: PropTypes.string.isRequired,
+    defaultCategory: PropTypes.string.isRequired,
     displayPost: PropTypes.bool.isRequired,
   }
 
