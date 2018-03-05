@@ -27,7 +27,7 @@ const CommentActions = props => (
     >
       <ActionThumbDown color="red" />
     </IconButton>
-    <CommentForm addItem={false} comment={props.comment} parentId={props.comment.parentId}/>
+    <CommentForm addItem={false} comment={props.comment} parentId={props.comment.parentId} />
     <IconButton
       tooltip="Delete"
       onClick={() => props.deleteComment(props.comment.id)}

@@ -24,7 +24,7 @@ class Post extends Component {
   componentDidMount() {
     const propMatch = this.props.match;
     const propPost = this.props.post;
-    if (propMatch && Object.keys(propPost).length === 0) this.props.getPosts();
+    if (propMatch && Object.keys(propPost || {}).length === 0) this.props.getPosts();
     if (paramTypePresent(propMatch, 'category') && this.props.defaultCategory === this.props.currentCategory) {
       this.props.setCategory(propMatch.params.category);
     }

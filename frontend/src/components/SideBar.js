@@ -1,30 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
 import { connect } from 'react-redux';
 import { toggleSideBar } from '../actions';
 import CategoriesMenu from './CategoriesMenu';
 
-class SideBar extends Component {
-  static propTypes = {
-    toggleSideBar: PropTypes.func.isRequired,
-    sideBarOpen: PropTypes.bool.isRequired,
-  }
+const SideBar = props => (
+  <div className="sideBar">
+    <Drawer
+      open={props.sideBarOpen}
+      docked={false}
+      onRequestChange={sideBarOpen => props.toggleSideBar(sideBarOpen)}
+    >
+      <CategoriesMenu />
+    </Drawer>
+  </div>
+);
 
-  render() {
-    return (
-      <div className="sideBar">
-        <Drawer
-          open={this.props.sideBarOpen}
-          docked={false}
-          onRequestChange={sideBarOpen => this.props.toggleSideBar(sideBarOpen)}
-        >
-          <CategoriesMenu />
-        </Drawer>
-      </div>
-    );
-  }
-}
+SideBar.propTypes = {
+  toggleSideBar: PropTypes.func.isRequired,
+  sideBarOpen: PropTypes.bool.isRequired,
+};
 
 const mapStateToProps = state => ({
   sideBarOpen: state.ui.sideBarOpen,
