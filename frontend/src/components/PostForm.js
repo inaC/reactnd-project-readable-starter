@@ -11,7 +11,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import { insertPost, updatePost } from '../actions';
-import './FormModal.css';
+import './App.css';
 
 class PostForm extends Component {
   static propTypes = {
