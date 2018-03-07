@@ -34,14 +34,24 @@ class PostForm extends Component {
       author: '',
       category: 0,
     },
+    blank_fields: {
+      title: true,
+      body: true,
+      author: true,
+      category: false,
+    },
   }
 
-  setPost = (state, attribute, value) => (
+  setPost = (state, attribute, value, emptyValue) => (
     {
       ...state,
       post: {
         ...state.post,
         [attribute]: value,
+      },
+      blank_fields: {
+        ...state.blank_fields,
+        [attribute]: value === emptyValue,
       },
     })
 
@@ -61,12 +71,18 @@ class PostForm extends Component {
       author: this.props.addItem ? '' : this.props.post.author,
       category: this.props.categories.indexOf(this.setInitialCategory()),
     },
+    blank_fields: {
+      title: this.props.addItem,
+      body: this.props.addItem,
+      author: this.props.addItem,
+      category: this.props.categories.indexOf(this.setInitialCategory()) < 0,
+    },
   })
 
-  setCategory = (event, index, value) => this.setState(state => this.setPost(state, 'category', value))
-  setTitle = (event, value) => this.setState(state => this.setPost(state, 'title', value))
-  setBody = (event, value) => this.setState(state => this.setPost(state, 'body', value))
-  setAuthor = (event, value) => this.setState(state => this.setPost(state, 'author', value))
+  setCategory = (event, index, value) => this.setState(state => this.setPost(state, 'category', value, -1))
+  setTitle = (event, value) => this.setState(state => this.setPost(state, 'title', value.trim(), ''))
+  setBody = (event, value) => this.setState(state => this.setPost(state, 'body', value.trim(), ''))
+  setAuthor = (event, value) => this.setState(state => this.setPost(state, 'author', value.trim(), ''))
   isCurrentCategoryDefault = () => this.props.currentCategory === this.props.defaultCategory
   openModal = () => this.setState(this.setInitialStateOnOpen())
   closeModal = () => this.setState({ open: false })
@@ -82,13 +98,20 @@ class PostForm extends Component {
     this.setState({ post: postResetted });
   }
 
+  displayErrorText = isValueEmpty => (isValueEmpty ? 'This field is required' : null)
+
+  requiredFieldsEmpty = () => {
+    const { title, body, author, category } = this.state.blank_fields;
+    return (title || body || author || category);
+  }
+
   submitForm = () => {
     const postToCreate = Object.assign({}, this.state.post);
     const currentTime = Date.now();
     postToCreate.id = currentTime.toString();
     postToCreate.timestamp = currentTime;
     postToCreate.category = this.props.categories[postToCreate.category];
-    if (this.props.addItem) this.props.insertPost(postToCreate);
+    if (this.props.addItem && !this.requiredFieldsEmpty()) this.props.insertPost(postToCreate);
     else {
       const { title, body } = this.state.post;
       this.props.updatePost(this.state.post.id, { title, body });
@@ -126,6 +149,7 @@ class PostForm extends Component {
         label="Submit"
         primary
         onClick={this.submitForm}
+        disabled={this.requiredFieldsEmpty()}
       />,
     ];
 
@@ -139,6 +163,7 @@ class PostForm extends Component {
           fullWidth
           open={this.state.open}
           onRequestClose={this.closeModal}
+          repositionOnUpdate={false}
         >
           <TextField
             floatingLabelText="Title"
@@ -146,6 +171,7 @@ class PostForm extends Component {
             fullWidth
             defaultValue={this.state.post.title}
             onChange={this.setTitle}
+            errorText={this.displayErrorText(this.state.blank_fields.title)}
           />
           <TextField
             floatingLabelText="Author"
@@ -154,15 +180,17 @@ class PostForm extends Component {
             disabled={!this.props.addItem}
             defaultValue={this.state.post.author}
             onChange={this.setAuthor}
+            errorText={this.displayErrorText(this.state.blank_fields.author)}
           />
           <TextField
             floatingLabelText="Body"
             fullWidth
             multiLine
-            rows={2}
-            rowsMax={5}
+            rows={3}
+            rowsMax={3}
             defaultValue={this.state.post.body}
             onChange={this.setBody}
+            errorText={this.displayErrorText(this.state.blank_fields.body)}
           />
           <SelectField
             value={this.state.post.category}
